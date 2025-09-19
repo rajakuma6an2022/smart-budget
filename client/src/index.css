@@ -1,0 +1,91 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Light theme */
+:root {
+  --color-bg: #f3f4f6;         
+  --color-card: #ffffff;        
+  --color-text: #1f2937;      
+  --color-text-muted: #6b7280; 
+  --color-primary: #2563eb;
+  --color-accent: #10b981;
+  --color-danger: #ef4444;
+}
+
+/* Dark theme */
+.dark {
+  --color-bg: #111827;
+  --color-card: #1f2937;
+  --color-text: #f3f4f6;
+  --color-text-muted: #9ca3af;
+  --color-primary: #3b82f6;
+  --color-accent: #34d399;
+  --color-danger: #f87171;
+}
+
+/* Custom class to hide scrollbar for WebKit */
+.scrollbar-none::-webkit-scrollbar {
+  display: none; /* Hide scrollbar */
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+
+
+/* loader */
+
+.loader {
+  display: inline-block;
+  transform: translateZ(1px);
+}
+
+.loader:after {
+  content: var(--loader-symbol, "$");
+  display: inline-block;
+  width: var(--loader-size, 48px);
+  height: var(--loader-size, 48px);
+  border-radius: 50%;
+  text-align: center;
+  line-height: calc(var(--loader-size, 48px) - 8px);
+  font-size: calc(var(--loader-size, 48px) / 1.5);
+  font-weight: bold;
+  background: var(--loader-bg, #FFD700);
+  color: var(--loader-color, #DAA520);
+  border: 4px double;
+  box-sizing: border-box;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
+  animation: coin-flip 4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+/* Responsive behavior for screens below 768px */
+@media (max-width: 768px) {
+  .loader:after {
+    width: calc(var(--loader-size, 48px) * 0.7);
+    height: calc(var(--loader-size, 48px) * 0.7);
+    line-height: calc((var(--loader-size, 48px) * 0.7) - 6px);
+    font-size: calc(var(--loader-size, 48px) * 0.5);
+  }
+}
+
+@keyframes coin-flip {
+  0%, 100% {
+    animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
+  }
+  0% {
+    transform: rotateY(0deg);
+  }
+  50% {
+    transform: rotateY(1800deg);
+    animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1);
+  }
+  100% {
+    transform: rotateY(3600deg);
+  }
+}
+
+
