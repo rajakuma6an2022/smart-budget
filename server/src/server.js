@@ -5,8 +5,6 @@ import expenseRoutes from "./routes/expenseRoutes.js";
 import { connectDB } from "./config/db.js";
 import dotenv from "dotenv";
 import cors from "cors";
-import { fileURLToPath } from "url";
-import path from "path";
 
 dotenv.config();
 
@@ -14,8 +12,8 @@ const app = express();
 
 // Allowed origins for CORS
 const allowedOrigins = [
-  "http://localhost:5173",                   // local dev
-  "https://smart-budget-frontend.onrender.com",  // production frontend
+  "http://localhost:5173",                  
+  "https://smart-budget-frontend.onrender.com", 
 ];
 
 // Middleware: enable CORS

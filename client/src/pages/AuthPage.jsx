@@ -64,10 +64,11 @@ const AuthPage = () => {
           })
         );
         navigate("/dashboard");
+      } else {
+        Toast.error(response?.data?.message);
       }
     } catch (err) {
       console.error("Login failed:", err);
-      Toast.error(response?.data?.message);
     }
   };
 
@@ -78,15 +79,18 @@ const AuthPage = () => {
       return;
     }
     try {
-      let body = { mobileNumber: mobile };
+      let body = { mobileNumber: mobile, mode: isLogin ? "login" : "signup" };
       const response = await sendOtp(body);
+      console.log("response", response);
       if (response?.data?.statusCode === 200) {
         setOtpSent(true);
         otpRef.current?.focus();
         Toast.success(response?.data?.message);
+      } else {
+        Toast.error(response?.error?.data?.message);
       }
-    } catch {
-      Toast.error(response?.data?.message);
+    } catch (error) {
+      console.log("error", error);
     }
   };
 
@@ -239,7 +243,7 @@ const AuthPage = () => {
                           pattern: "Enter a valid 10-digit number",
                         }}
                       />
-                      {!otpSent && (
+                      {/* {!otpSent && (
                         <button
                           type="button"
                           onClick={handleSendOtp}
@@ -247,7 +251,7 @@ const AuthPage = () => {
                         >
                           Send OTP
                         </button>
-                      )}
+                      )} */}
                     </div>
                     {otpSent && (
                       <>
@@ -274,22 +278,26 @@ const AuthPage = () => {
                             }}
                           />
                         </div>
-                        <button
-                          type="submit"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (!otpSent) {
-                              Toast.error("Please Verify your Mobile Number");
-                            } else {
-                              handleSubmit(handleVerifyOtp());
-                            }
-                          }}
-                          className="w-full bg-primary text-white py-2 rounded-lg mt-2 hover:opacity-90"
-                        >
-                          Login
-                        </button>
                       </>
                     )}
+                    <button
+                      type="submit"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (watch("mobile")) {
+                          if (!otpSent) {
+                            handleSendOtp();
+                          } else {
+                            handleSubmit(handleVerifyOtp());
+                          }
+                        } else {
+                          Toast.error("Please Enter your Mobile Number");
+                        }
+                      }}
+                      className="w-full bg-primary text-white py-2 rounded-lg mt-2 hover:opacity-90"
+                    >
+                      {otpSent ? "Login" : "Send OTP"}
+                    </button>
                   </form>
 
                   {/* <div className="mt-4 flex items-center justify-center">
@@ -439,22 +447,13 @@ const AuthPage = () => {
                         }}
                       />
                     </div>
-                    {!otpSent ? (
-                      <button
-                        type="button"
-                        onClick={handleSendOtp}
-                        className="w-full bg-primary text-white py-2 rounded-lg mt-2 hover:opacity-90"
-                      >
-                        Send OTP
-                      </button>
-                    ) : (
-                      <button
-                        type="submit"
-                        className="w-full bg-primary text-white py-2 rounded-lg mt-2 hover:opacity-90"
-                      >
-                        Signup
-                      </button>
-                    )}
+
+                    <button
+                      type="submit"
+                      className="w-full bg-primary text-white py-2 rounded-lg mt-2 hover:opacity-90"
+                    >
+                      Signup
+                    </button>
                   </form>
 
                   <p className="mt-4 text-center text-sm text-text">

@@ -48,35 +48,35 @@ export const signup = async (req, res) => {
 // Send OTP
 export const sendOtp = async (req, res) => {
   try {
-    const { mobileNumber } = req.body;
+    const { mobileNumber, mode } = req.body;
 
-     const formattedNumber = mobileNumber.startsWith("+91")
+    const formattedNumber = mobileNumber.startsWith("+91")
       ? mobileNumber
       : `+91${mobileNumber}`;
 
-    const user = await User.findOne({ mobileNumber });
+  const user = await User.findOne({ mobileNumber });
     if (!user) {
-      return sendResult(res, false, 404, "User not found");
+      return res.status(404).json({ success: false, message: "User not found. Please signup first." });
     }
 
     const otp = generateOtp();
     // const otp = "1234"; // local development
 
-    // twilio sms
-    
     await Otp.deleteMany({ mobileNumber });
     await Otp.create({ mobileNumber, otp });
-    
+
+    // twilio sms
     const sent = await sendOtpSMS(formattedNumber, otp);
 
-     if (!sent) {
-      return res.status(500).json({ success: false, message: "Failed to send OTP" });
+    if (!sent) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Failed to send OTP" });
     }
 
     return sendResult(res, true, 200, "OTP sent successfully", {
       id: user._id,
       isOtpVerified: user.isOtpVerified,
-      otp: otp ,
     });
   } catch (error) {
     console.error("Send OTP error:", error);
