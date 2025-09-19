@@ -15,7 +15,7 @@ const app = express();
 // Allowed origins for CORS
 const allowedOrigins = [
   "http://localhost:5173",                   // local dev
-  "https://smart-budget-frontend.onrender.com/",  // production frontend
+  "https://smart-budget-frontend.onrender.com",  // production frontend
 ];
 
 // Middleware: enable CORS
