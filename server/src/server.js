@@ -5,6 +5,8 @@ import expenseRoutes from "./routes/expenseRoutes.js";
 import { connectDB } from "./config/db.js";
 import dotenv from "dotenv";
 import cors from "cors";
+import { fileURLToPath } from "url";
+import path from "path";
 
 dotenv.config();
 
@@ -46,6 +48,14 @@ app.use((err, req, res, next) => {
     error: "Something went wrong!",
     message: err.message,
   });
+});
+
+// Serve React frontend
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, "../../client/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../client/dist", "index.html"));
 });
 
 // Connect DB and start server
